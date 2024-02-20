@@ -1,13 +1,9 @@
 node (label: 'Scipt_Slave') {
-    
     stage ('Script') {
-        
         // Write your logic
-        
         sh '''#!/bin/bash
               sleep 60
               echo "Hello-World"
 '''
-    
     }
 }
