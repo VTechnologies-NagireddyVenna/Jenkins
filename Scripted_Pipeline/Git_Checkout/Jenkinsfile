@@ -1,0 +1,7 @@
+node {
+    
+    stage ('git'){
+        git branch: '2.1-master', url: 'git@github.com:thymeleaf/thymeleafexamples-petclinic.git'
+    }
+    
+}
