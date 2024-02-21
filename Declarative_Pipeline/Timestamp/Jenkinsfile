@@ -1,3 +1,18 @@
+// General Pipeline (Without Timestamp option)
+
+pipeline {
+    agent any
+    stages {
+        stage(Test) {
+            steps {
+                echo "Hello_World"
+            }
+        }
+    }
+}
+
+
+// With Timestamp option 
 pipeline {
     agent any
     stages {
