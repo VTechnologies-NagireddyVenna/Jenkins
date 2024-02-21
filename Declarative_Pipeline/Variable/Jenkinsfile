@@ -1,9 +1,70 @@
+// Without any variables running Jenkinsfile 
 pipeline {
     agent any
     stages {
         stage('Print') {
             steps {
                 echo 'Hello World'
+            }
+        }
+    }
+}
+
+// Adding the Global variable (Means these variables can be used in the entire Jenkinsfile)
+
+def text = "Welcome to VTechnologies"
+pipeline {
+    agent any
+    stages {
+        stage('Hello') {
+            steps {
+                echo "${text}"
+            }
+        }
+    }
+}
+
+// Adding the Stage level variables (Means these variables can be used in the particular stage only) 
+
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+				script{
+				    def name = "VTechnologies"
+					echo "$name"
+				}
+            }
+        }
+        stage ('test'){
+            steps {
+                script {
+                    echo "$name"
+                } 
+            }
+        }      
+    }   
+}
+
+Note: The second stage will fail without miss 
+
+// Condition 
+
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {	
+				script{
+					def name = "VTechnologies"					
+					if(name == "jeff")
+						println("hi ${name}")
+					else
+						println("Hello VTech")															
+					sleep 2	
+					echo "end of script"
+				}
             }
         }
     }
