@@ -1,0 +1,16 @@
+pipeline {
+    agent {
+        node{
+	   label "Scipt_Slave"
+	   customWorkspace "/root/AgentWorkspace"
+	     }
+	   }
+
+    stages {
+        stage('Print') {
+            steps {
+                echo 'Hello World'
+            }
+        }
+    }
+}
