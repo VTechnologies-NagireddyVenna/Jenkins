@@ -1,0 +1,47 @@
+#!/bin/bash
+ENVIRONMENT="${ENVIRONMENT}"
+WAR_FILE_PATH="${WAR_FILE_PATH:-target/petclinic.war}"
+
+DEV_TOMCAT_SERVER="172.31.2.238"
+QA_TOMCAT_SERVER="13.233.91.57"
+PREPROD_TOMCAT_SERVER="65.0.106.33"
+PROD_TOMCAT_SERVER="43.204.216.112"
+
+TOMCAT_WEBAPPS_DIR="/opt/apache-tomcat-9.0.96/webapps"
+
+if [ ! -f "$WAR_FILE_PATH" ]; then
+    echo "Error: WAR file not found at $WAR_FILE_PATH"
+    exit 1
+fi
+
+case "$ENVIRONMENT" in
+    "Dev")
+        TARGET_SERVER="$DEV_TOMCAT_SERVER"
+        ;;
+    "QA")
+        TARGET_SERVER="$QA_TOMCAT_SERVER"
+        ;;
+    "Pre-Prod")
+        TARGET_SERVER="$PREPROD_TOMCAT_SERVER"
+        ;;
+    "Prod")
+        TARGET_SERVER="$PROD_TOMCAT_SERVER"
+        ;;
+    *)
+        echo "Error: Invalid environment specified. Please select one of Dev, QA, Pre-Prod, or Prod."
+        exit 1
+        ;;
+esac
+
+echo "Deploying to $ENVIRONMENT environment on server $TARGET_SERVER..."
+
+# Stop Tomcat
+ssh "$TARGET_SERVER" "sudo sh /opt/apache-tomcat-9.0.96/bin/shutdown.sh"
+
+# Deploy the WAR file
+scp "$WAR_FILE_PATH" "$TARGET_SERVER:$TOMCAT_WEBAPPS_DIR/"
+
+# Start Tomcat
+ssh "$TARGET_SERVER" "sudo sh /opt/apache-tomcat-9.0.96/bin/startup.sh"
+
+echo "Deployment to $ENVIRONMENT complete."
